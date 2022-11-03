@@ -23,7 +23,7 @@ client.on("messageCreate", async (message) => {
     // message.channel.send("hello");
     msgCommandsNames.map((commandName) => {
       msgCommands[commandName].passCondition(message) &&
-        msgCommands[commandName].execute(message);
+        msgCommands[commandName].execute(message, client);
     });
   } catch (error: any) {
     console.error(error);
