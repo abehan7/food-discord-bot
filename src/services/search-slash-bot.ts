@@ -18,10 +18,14 @@ const client = new Client({
 client.once("ready", () => console.log("Discord bot Ready!"));
 
 client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
-  const { commandName } = interaction;
-  // channel.guild.members.cache.get(discord_id);
-  console.log(commandName);
-  await commands[commandName].execute(interaction, client);
+  try {
+    if (!interaction.isCommand()) return;
+    const { commandName } = interaction;
+    // channel.guild.members.cache.get(discord_id);
+    console.log(commandName);
+    await commands[commandName].execute(interaction, client);
+  } catch (error: any) {
+    console.error(error);
+  }
 });
 client.login(config.DISCORD_TOKEN);

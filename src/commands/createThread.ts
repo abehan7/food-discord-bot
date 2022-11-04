@@ -25,15 +25,23 @@ export async function execute(interaction: CommandInteraction, client: Client) {
 
     for (const food of foodJsonData) {
       const thread = await generalChannel.threads.create({
-        name: food.name,
+        name: `${food.id}_${food.name}`,
         autoArchiveDuration: 60,
         reason: "food thread",
       });
+      // 이미지 전체 다 보내주는 로직
+      const imgEmbeds = food.photo_urls.map((x) => {
+        const embed = new EmbedBuilder();
+        embed.setImage(x);
+        return embed;
+      });
+      // 이거는 첫번째 사진만 보내주는 로직
+      const embeds = [new EmbedBuilder().setImage(food.photo_urls[0])];
+      await generalChannel.send({ embeds });
       const embed = new EmbedBuilder()
-        .setTitle(food.name)
-        .setDescription(food.text)
-        .setImage(food.photo_urls[0]);
-      thread.send({ embeds: [embed] });
+        .setTitle(`${food.id}-${food.name}`)
+        .setDescription(food.text);
+      await thread.send({ embeds: [embed, ...imgEmbeds] });
     }
 
     return interaction.reply("create-thread!");

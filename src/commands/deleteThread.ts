@@ -19,8 +19,8 @@ export async function execute(interaction: CommandInteraction, client: Client) {
     const foodJsonData = (await getFoodJsonData(messages)) || [];
 
     for (const food of foodJsonData) {
-      const thread = generalChannel.threads.cache.find(
-        (x) => x.name === food.name
+      const thread = generalChannel.threads.cache.find((x) =>
+        x.name.includes(food.name)
       );
       if (!thread) return;
       await thread.delete();
