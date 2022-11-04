@@ -1,14 +1,9 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import {
-  ChannelType,
-  Client,
-  CommandInteraction,
-  EmbedBuilder,
-} from "discord.js";
+import { ChannelType, Client, CommandInteraction } from "discord.js";
 import { getFoodJsonData } from "../utils";
 
 export const data = new SlashCommandBuilder()
-  .setName("create_thread")
+  .setName("delete_thread")
   .setDescription("Replies with Pong!");
 
 export async function execute(interaction: CommandInteraction, client: Client) {
@@ -24,18 +19,13 @@ export async function execute(interaction: CommandInteraction, client: Client) {
     const foodJsonData = (await getFoodJsonData(messages)) || [];
 
     for (const food of foodJsonData) {
-      const thread = await generalChannel.threads.create({
-        name: food.name,
-        autoArchiveDuration: 60,
-        reason: "food thread",
-      });
-      const embed = new EmbedBuilder()
-        .setTitle(food.name)
-        .setDescription(food.text)
-        .setImage(food.photo_urls[0]);
-      thread.send({ embeds: [embed] });
+      const thread = generalChannel.threads.cache.find(
+        (x) => x.name === food.name
+      );
+      if (!thread) return;
+      await thread.delete();
     }
-
+    console.log("done");
     return interaction.reply("create-thread!");
   } catch (error: any) {
     console.error(error);
