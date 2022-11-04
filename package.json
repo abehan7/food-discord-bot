@@ -6,7 +6,10 @@
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "botDev": "concurrently \"tsc -w\" \"nodemon dist/services/search-bot.js\""
+    "botDev": "concurrently \"tsc -w\" \"nodemon dist/services/search-bot.js\"",
+    "search-slash": "concurrently \"tsc -w\" \"nodemon dist/services/search-slash-bot.js\"",
+    "thread": "concurrently \"tsc -w\" \"nodemon dist/services/thread-maker.js\"",
+    "deploy:commands": "tsc && node dist/deploy-commands.js"
   },
   "keywords": [],
   "author": "",
